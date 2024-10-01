@@ -7,28 +7,28 @@ import { UpdateChildDto } from './dto/update-child.dto';
 export class ChildrenController {
   constructor(private readonly childrenService: ChildrenService) {}
 
-  @Post()
+  @Post('/create')
   create(@Body() createChildDto: CreateChildDto) {
     return this.childrenService.create(createChildDto);
   }
 
-  @Get()
+  @Get('/find-all')
   findAll() {
     return this.childrenService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.childrenService.findOne(+id);
+  @Get('/find/:identityCard')
+  findOne(@Param('identityCard') identityCard: number) {
+    return this.childrenService.findOne(identityCard);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateChildDto: UpdateChildDto) {
-    return this.childrenService.update(+id, updateChildDto);
+  @Patch('/update/:identityCard')
+  update(@Param('identityCard') identityCard: number, @Body() updateChildDto: UpdateChildDto) {
+    return this.childrenService.update(identityCard, updateChildDto);
   }
 
-  @Delete(':id')
+  @Delete('/delete/:')
   remove(@Param('id') id: string) {
-    return this.childrenService.remove(+id);
+    return this.childrenService.Delete(+id);
   }
 }
