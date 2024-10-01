@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Child } from './entities/child.entity';
 import { Model } from 'mongoose';
+import { ColumnHstoreOptions } from 'typeorm/decorator/options/ColumnHstoreOptions';
 
 @Injectable()
 export class ChildrenService {
@@ -25,19 +26,34 @@ export class ChildrenService {
   }
   
 
-  findAll() {
-    return `This action returns all children`;
+ async findAll(): Promise <Child[]> {
+    const child = await this.childModel.find().exec();
+    if(!child){
+      throw new HttpException('No se encontraron niños', HttpStatus.NOT_FOUND)
+    }
+    return child ;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} child`;
+  async findOne(identityCard: number):Promise <Child> {
+    const findChild = await this.childModel.findOne({identityCard}).exec();
+    if(!findChild){
+      throw new HttpException('No se encontró el niño', HttpStatus.NOT_FOUND)
+    }
+    return  findChild;
   }
 
-  update(id: number, updateChildDto: UpdateChildDto) {
-    return `This action updates a #${id} child`;
+ async update(identityCard: number, updateChildDto: UpdateChildDto): Promise<Child> {
+    const updateChild = await this.childModel.findOneAndUpdate({identityCard}, updateChildDto, {new: true}).exec();
+    if(!updateChild){
+      throw new HttpException('No se encontró el niño', HttpStatus.NOT_FOUND)
+    }
+    return updateChild;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} child`;
+  async Delete (identityCard: number): Promise <void> {
+    const deleteChild = await this.childModel.findOneAndDelete({identityCard}).exec();
+    if(!deleteChild){
+      throw new HttpException('No se encontró el niño', HttpStatus.NOT_FOUND)
+    }
   }
 }
