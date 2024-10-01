@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from 'mongoose';
 
 @Schema({timestamps: true })
 export class Child extends Document {
 
-    @Prop({ required: true })
+    @Prop({ required: true, unique: true })
     identityCard:number;
 
     @Prop({ required: true })
