@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,10 +13,17 @@ export class ChildrenService {
   ){}
 
 
- async create(createChildDto: CreateChildDto): promise<Child> {
-  const existingChild = await this.childModel.findOne({})
-    return 'This action adds a new child';
+ async create(createChildDto: CreateChildDto): Promise<Child> {
+  const existingChild = await this.childModel.findOne({ identityCard: createChildDto.identityCard }).exec();
+
+    if (existingChild) {
+      throw new BadRequestException('Este niño ya está registrado con este identityCard.');
+    }
+
+    const newChild = new this.childModel(createChildDto);
+    return newChild.save();
   }
+  
 
   findAll() {
     return `This action returns all children`;
