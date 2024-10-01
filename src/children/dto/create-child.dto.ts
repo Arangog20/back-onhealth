@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { ArrayNotEmpty, IsArray, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateChildDto {
     @IsOptional()
@@ -21,13 +21,20 @@ export class CreateChildDto {
     @ApiProperty()
     lastName: string;
 
+    @IsNotEmpty()
+    @ApiProperty({ type: Date })
+    birthDate: Date;
+
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
     municipality: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty()
-    vaccine: string;
+    @IsArray()
+    @IsOptional()
+    @ApiProperty({
+      type: [String], 
+      description: 'Arreglo de  vacunas que ha recibido el niño'
+    })
+    vaccine?: string[];
 }

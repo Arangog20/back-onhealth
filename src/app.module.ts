@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import dbConfig from './persistence/db-config';
 import { PersistenceModule } from './persistence/persistence.module';
 import { ChildrenModule } from './children/children.module';
+import { VaccineModule } from './vaccine/vaccine.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { ChildrenModule } from './children/children.module';
       envFilePath: '.env',
     }),
     PersistenceModule,
-    ChildrenModule
+    ChildrenModule,
+    VaccineModule
   ],
   controllers: [],
   providers: [],
