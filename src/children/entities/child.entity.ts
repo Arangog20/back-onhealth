@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Vaccine } from "src/vaccine/entities/vaccine.entity";
 
 @Schema({timestamps: true })
 export class Child extends Document {
@@ -17,10 +18,10 @@ export class Child extends Document {
     municipality : string;
 
     @Prop({ required: true })
-    age: number;
+    birthDate: Date;
 
-    @Prop({ required: true })
-    vaccine: string;
+    @Prop({ type: Types.ObjectId, ref: 'Vaccine',required: false })
+    vaccine: Vaccine [];
 }
 
 export const ChildSchema = SchemaFactory.createForClass(Child);
