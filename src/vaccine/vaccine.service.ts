@@ -12,21 +12,30 @@ export class VaccineService {
     private readonly vaccineModel: Model<Vaccine>
 ){}
   
-  async create(createVaccineDto: CreateVaccineDto) {
-   createVaccineDto.vaccineName = createVaccineDto.vaccineName.toLocaleLowerCase();
+async create(createVaccineDto: CreateVaccineDto) {
+  createVaccineDto.vaccineName = createVaccineDto.vaccineName.trim().toLocaleLowerCase();
 
-    const existingVaccinate = await this.vaccineModel.findOne({vaccineName: createVaccineDto.vaccineName}).exec();
-
-    if (existingVaccinate) {
+  const existingVaccine = await this.vaccineModel.findOne({ vaccineName: createVaccineDto.vaccineName }).exec();
+  if (existingVaccine) {
       throw new HttpException(
-        `Vaccine with name ${createVaccineDto.vaccineName} already exists`,
-        HttpStatus.BAD_REQUEST,
+          `Vacuna con el nombre "${createVaccineDto.vaccineName}" ya existe.`,
+          HttpStatus.BAD_REQUEST,
       );
-    }
-
-    const newVaccine = new this.vaccineModel(createVaccineDto);
-    return newVaccine.save();
   }
+  if (createVaccineDto._id) {
+      const existingVaccineById = await this.vaccineModel.findById(createVaccineDto._id).exec();
+      if (existingVaccineById) {
+          throw new HttpException(
+              `Ya existe una vacuna con el ID ${createVaccineDto._id}.`,
+              HttpStatus.BAD_REQUEST,
+          );
+      }
+  }
+
+  // Crear una nueva vacuna
+  const newVaccine = new this.vaccineModel(createVaccineDto);
+  return await newVaccine.save();
+}
 
   async findAll(): Promise<Vaccine[]> {
     const vaccines = await this.vaccineModel.find().exec();
@@ -37,7 +46,7 @@ export class VaccineService {
   }
 
   async findOne(vaccineName: string): Promise<Vaccine> {
-    const vaccine = await this.vaccineModel.findOne({ vaccineName }).exec();
+    const vaccine = await this.vaccineModel.findOne({vaccineName}).exec();
     if (!vaccine) {
       throw new HttpException('Vacuna no encontrada', HttpStatus.NOT_FOUND);
     }
@@ -53,11 +62,13 @@ export class VaccineService {
   }
 
  
-  async Delete(vaccineName: string): Promise<void> {
+  async Delete(vaccineName: string): Promise<string> {
     const result = await this.vaccineModel.findOneAndDelete({ vaccineName }).exec();
     if (!result) {
       throw new HttpException('Vacuna no encontrada', HttpStatus.NOT_FOUND);
     }
+    return 'Vacuna eliminada exitosamente';
   }
+
 }
 

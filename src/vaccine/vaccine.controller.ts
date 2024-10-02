@@ -17,18 +17,18 @@ export class VaccineController {
     return this.vaccineService.findAll();
   }
 
-  @Get('/find/:vaccine-name')
-  findOne(@Param('vacconeName')vaccineName: string) {
+  @Get('/find/:vaccineName')
+  findOne(@Param('vaccineName') vaccineName: string) {
     return this.vaccineService.findOne(vaccineName);
   }
 
-  @Put('/update/:vaccine-name')
-  update(@Param('vacconeName')vacconeName: string, @Body() updateVaccineDto: UpdateVaccineDto) {
+  @Put('/update/:vaccineName')
+  update(@Param('vaccineName') vacconeName: string, @Body() updateVaccineDto: UpdateVaccineDto) {
     return this.vaccineService.update(vacconeName, updateVaccineDto);
   }
 
-  @Delete('/delete/:vaccine-name')
-  remove(@Param('vacconeName') vacconeName: string) {
+  @Delete('/delete/:vaccineName')
+  remove(@Param('vaccineName') vacconeName: string) {
     return this.vaccineService.Delete(vacconeName);
   }
 }
