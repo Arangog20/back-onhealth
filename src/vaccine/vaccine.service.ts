@@ -32,7 +32,6 @@ async create(createVaccineDto: CreateVaccineDto) {
       }
   }
 
-  // Crear una nueva vacuna
   const newVaccine = new this.vaccineModel(createVaccineDto);
   return await newVaccine.save();
 }
