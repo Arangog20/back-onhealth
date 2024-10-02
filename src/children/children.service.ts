@@ -28,7 +28,7 @@ export class ChildrenService {
 
  async findAll(): Promise <Child[]> {
     const child = await this.childModel.find().exec();
-    if(!child){
+    if(!child || child.length === 0){
       throw new HttpException('No se encontraron niños', HttpStatus.NOT_FOUND)
     }
     return child ;
@@ -50,10 +50,11 @@ export class ChildrenService {
     return updateChild;
   }
 
-  async Delete (identityCard: number): Promise <void> {
+  async Delete (identityCard: number): Promise <string> {
     const deleteChild = await this.childModel.findOneAndDelete({identityCard}).exec();
     if(!deleteChild){
       throw new HttpException('No se encontró el niño', HttpStatus.NOT_FOUND)
     }
+    return `niño con la identificacion ${identityCard} eliminado correctamente`;
   }
 }
