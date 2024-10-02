@@ -17,5 +17,5 @@ export class CreateVaccineDto {
     description:
       'Edad mínima a partir de la cual se puede suministrar la vacuna',
   })
-  minAge: number;
+  restrictions: number;
 }
