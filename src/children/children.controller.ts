@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { ChildrenService } from './children.service';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
@@ -22,13 +22,13 @@ export class ChildrenController {
     return this.childrenService.findOne(identityCard);
   }
 
-  @Patch('/update/:identityCard')
+  @Put('/update/:identityCard')
   update(@Param('identityCard') identityCard: number, @Body() updateChildDto: UpdateChildDto) {
     return this.childrenService.update(identityCard, updateChildDto);
   }
 
-  @Delete('/delete/:')
-  remove(@Param('id') id: string) {
-    return this.childrenService.Delete(+id);
+  @Delete('/delete/:identityCard')
+  remove(@Param('identityCard') identityCard: number) {
+    return this.childrenService.Delete(identityCard);
   }
 }
